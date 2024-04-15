@@ -1,4 +1,4 @@
-from RPA.Browser.Selenium import Selenium,WebDriverWait
+from RPA.Browser.Selenium import Selenium,WebDriverWait,By
 import logging
 import urllib.request
 import os
@@ -13,8 +13,7 @@ class AljazeeraExtractor:
         logging.basicConfig(filename=f'aljazeera_{time}.log', level=logging.INFO)
         self.browser = Selenium()
         self.browser.auto_close = False
-        self.browser.headless = True
-        self.browser.open_browser()
+        self.browser.open_available_browser(headless=True)
         self.logger.info("Aljazeera extractor initialized")
     def extractLatestNews(self,searchPhrase):
         try:
@@ -42,34 +41,33 @@ class AljazeeraExtractor:
         self.__extractHelper__()
     def __extractHelper__(self):
         self.browser.click_element("id:search-sort-option")
-        self.browser.click_element("tag:select option[value='date']")
+        self.browser.click_element('xpath://option[@value="date"]')
         wait = WebDriverWait(self.browser, timeout=5)
         try:
-            wait.until(lambda d : len(self.browser.find_elements("tag:label.search-summary__options-title"))!=0)
+            wait.until(lambda d : len(self.browser.find_elements("class:search-summary__options-title"))!=0)
         except:
-            self.logger.info("")
+            self.logger.info("Unable to find the list of news")
             self.browser.close_browser()
             return
         app = Application()
         app.open_application()
-        app.open_workbook(f'{int(datetime.now().timestamp())}.xlsx')
+        app.open_workbook("Aljazeera.xlsx")
         app.set_active_worksheet(sheetname='Latest Aljazeera News')
         app.write_to_cells(row=1, column=1, value="Title")
         app.write_to_cells(row=1, column=2, value="Date")
         app.write_to_cells(row=1, column=3, value="Description")
-        app.write_to_cells(row=1, column=1, value="Picture Filename")
-        app.write_to_cells(row=1, column=1, value="Count of Search Phrases")
-        app.write_to_cells(row=1, column=1, value="Contains Amount of Money")
+        app.write_to_cells(row=1, column=4, value="Picture Filename")
+        app.write_to_cells(row=1, column=5, value="Count of Search Phrases")
+        app.write_to_cells(row=1, column=6, value="Contains Amount of Money")
         counter = 2
-        self.browser.get_text()
-        for el in self.browser.find_elements(".search-result__list article"):
-            title = el.get_text()("tag:span").text.replace('\xad','')
-            date =  el.get_text()("tag:footer span[aria-hidden='true']")
+        for el in self.browser.find_elements("tag:article"):
+            title = el.find_element(By.TAG_NAME,"span").text.replace('\xad','')
+            date =  el.find_elements(By.CLASS_NAME,"span.screen-reader-text")
             if len(date)==0:
                 self.logger.info("There is no date for "+title+" title")
             # self.browser.
-            description = el.find_element("class:gc__body-wrap p").text.replace('\xad','').replace('\"','')
-            imageURL = el.find_element("tag:img").get_attribute("src")
+            description = el.find_element(By.TAG_NAME,"p").text.replace('\xad','').replace('\"','')
+            imageURL = el.find_element(By.TAG_NAME,"img").get_attribute("src")
             response = urllib.request.urlopen(imageURL)
             imageData = response.read()
             imageName = "".join(title.split(' ')[:3]).replace("|","").replace(",","")
@@ -82,7 +80,7 @@ class AljazeeraExtractor:
                 f.write(imageData)
                 self.logger.info("Image Successfully Downloaded for "+title+" title")
             app.write_to_cells(row=counter, column=1, value=title)
-            app.write_to_cells(row=counter, column=2, value="No Date" if len(date)==0 else date)
+            app.write_to_cells(row=counter, column=2, value="No Date" if len(date)==0 else date[0].text)
             app.write_to_cells(row=counter, column=3, value=description)
             app.write_to_cells(row=counter, column=4, value=imageName)
             app.write_to_cells(row=counter, column=5, value=countOfPhrase)
@@ -90,7 +88,7 @@ class AljazeeraExtractor:
             counter += 1
         app.save_excel()
         app.quit_application()
-        self.browser.quit()
+        self.browser.close_browser()
             
 
 al = AljazeeraExtractor()
