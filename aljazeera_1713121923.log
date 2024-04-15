@@ -1,5 +1,0 @@
-INFO:RobotFramework:Opening browser 'firefox' to base url 'https://www.aljazeera.com/'.
-INFO:__main__:Aljazeera extractor initialized
-INFO:RobotFramework:Clicking element 'class:icon--search'.
-INFO:RobotFramework:Typing text 'science' into text field 'class:search-bar__input'.
-INFO:RobotFramework:Submitting form 'search-bar__form'.

@@ -1,6 +1,7 @@
 from robocorp.tasks import task
+from AlijazeeraExtractor import AljazeeraExtractor
 
 @task
 def minimal_task():
-    message = "Hello"
-    message = message + " World!"
+    ext = AljazeeraExtractor()
+    ext.extractLatestNews("science")

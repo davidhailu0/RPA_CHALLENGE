@@ -1,4 +1,0 @@
-INFO:RobotFramework:Opening browser 'firefox' to base url 'None'.
-INFO:__main__:Aljazeera extractor initialized
-INFO:RobotFramework:Opening url 'https://www.aljazeera.com/'
-INFO:RobotFramework:Clicking element 'css:svg.icon--burger-menu'.

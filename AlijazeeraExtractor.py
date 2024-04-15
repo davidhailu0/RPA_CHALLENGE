@@ -4,7 +4,7 @@ import urllib.request
 import os
 import re
 from  datetime import datetime
-from openpyxl import Workbook
+from RPA.Excel.Application import Application
 
 class AljazeeraExtractor:
     def __init__(self) -> None:
@@ -14,12 +14,15 @@ class AljazeeraExtractor:
         self.browser = Selenium()
         self.browser.auto_close = False
         self.browser.headless = True
-        try:
-            self.browser.open_browser(url="https://www.aljazeera.com/")
-        except:
-            self.logger.error("There is an error connecting to aljazeera.com")
+        self.browser.open_browser()
         self.logger.info("Aljazeera extractor initialized")
     def extractLatestNews(self,searchPhrase):
+        try:
+            self.browser.go_to("https://www.aljazeera.com/")
+        except:
+            self.logger.error("There is an error connecting to aljazeera.com")
+            self.browser.close_browser()
+            return
         self.searchPhrase = searchPhrase
         self.browser.click_element('class:icon--search')
         self.browser.input_text("class:search-bar__input",searchPhrase)
@@ -42,19 +45,21 @@ class AljazeeraExtractor:
         self.browser.click_element("tag:select option[value='date']")
         wait = WebDriverWait(self.browser, timeout=5)
         try:
-            wait.until(lambda d : len(self.browser.find_elements("label.search-summary__options-title"))!=0)
+            wait.until(lambda d : len(self.browser.find_elements("tag:label.search-summary__options-title"))!=0)
         except:
             self.logger.info("")
             self.browser.close_browser()
             return
-        wb = Workbook()
-        ws = wb.active
-        ws['A1'] = "Title"
-        ws['B1'] = "Date" 
-        ws['C1'] = "Description"
-        ws['D1'] = "Picture Filename"
-        ws['E1'] = "Count of Search Phrases"
-        ws['F1'] = "Contains Amount of Money"
+        app = Application()
+        app.open_application()
+        app.open_workbook(f'{int(datetime.now().timestamp())}.xlsx')
+        app.set_active_worksheet(sheetname='Latest Aljazeera News')
+        app.write_to_cells(row=1, column=1, value="Title")
+        app.write_to_cells(row=1, column=2, value="Date")
+        app.write_to_cells(row=1, column=3, value="Description")
+        app.write_to_cells(row=1, column=1, value="Picture Filename")
+        app.write_to_cells(row=1, column=1, value="Count of Search Phrases")
+        app.write_to_cells(row=1, column=1, value="Contains Amount of Money")
         counter = 2
         self.browser.get_text()
         for el in self.browser.find_elements(".search-result__list article"):
@@ -76,14 +81,15 @@ class AljazeeraExtractor:
             with open(os.path.join("./",f"{imageName}.jpg"),"wb") as f:
                 f.write(imageData)
                 self.logger.info("Image Successfully Downloaded for "+title+" title")
-            ws[f"A{counter}"] = title
-            ws[f"B{counter}"] = "No Date" if len(date)==0 else date[0].text
-            ws[f"C{counter}"] = description
-            ws[f"D{counter}"] = imageName
-            ws[f"E{counter}"] = countOfPhrase
-            ws[f"F{counter}"] = str(containsCurrency)
+            app.write_to_cells(row=counter, column=1, value=title)
+            app.write_to_cells(row=counter, column=2, value="No Date" if len(date)==0 else date)
+            app.write_to_cells(row=counter, column=3, value=description)
+            app.write_to_cells(row=counter, column=4, value=imageName)
+            app.write_to_cells(row=counter, column=5, value=countOfPhrase)
+            app.write_to_cells(row=counter, column=6, value=str(containsCurrency))
             counter += 1
-        wb.save(os.path.join("./",f'{int(datetime.now().timestamp())}.xlsx'))
+        app.save_excel()
+        app.quit_application()
         self.browser.quit()
             
 
