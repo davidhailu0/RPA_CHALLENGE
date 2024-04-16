@@ -4,7 +4,7 @@ import urllib.request
 import os
 import re
 from  datetime import datetime
-from RPA.Excel.Application import Application
+from openpyxl import Workbook
 
 class AljazeeraExtractor:
     def __init__(self) -> None:
@@ -49,16 +49,14 @@ class AljazeeraExtractor:
             self.logger.info("Unable to find the list of news")
             self.browser.close_browser()
             return
-        app = Application()
-        app.open_application()
-        app.open_workbook("Aljazeera.xlsx")
-        app.set_active_worksheet(sheetname='Latest Aljazeera News')
-        app.write_to_cells(row=1, column=1, value="Title")
-        app.write_to_cells(row=1, column=2, value="Date")
-        app.write_to_cells(row=1, column=3, value="Description")
-        app.write_to_cells(row=1, column=4, value="Picture Filename")
-        app.write_to_cells(row=1, column=5, value="Count of Search Phrases")
-        app.write_to_cells(row=1, column=6, value="Contains Amount of Money")
+        wb = Workbook()
+        sheet = wb.active
+        sheet['A1'] = "Title"
+        sheet['B1'] = "Date"
+        sheet['C1'] = "Description"
+        sheet['D1'] = "Picture Filename"
+        sheet['E1'] = "Count of Search Phrases"
+        sheet['F1'] = "Contains Amount of Money"
         counter = 2
         for el in self.browser.find_elements("tag:article"):
             title = el.find_element(By.TAG_NAME,"span").text.replace('\xad','')
@@ -78,15 +76,14 @@ class AljazeeraExtractor:
             with open(os.path.join("./",f"{imageName}.jpg"),"wb") as f:
                 f.write(imageData)
                 self.logger.info("Image Successfully Downloaded for "+title+" title")
-            app.write_to_cells(row=counter, column=1, value=title)
-            app.write_to_cells(row=counter, column=2, value="No Date" if len(date)==0 else date[0].text)
-            app.write_to_cells(row=counter, column=3, value=description)
-            app.write_to_cells(row=counter, column=4, value=imageName)
-            app.write_to_cells(row=counter, column=5, value=countOfPhrase)
-            app.write_to_cells(row=counter, column=6, value=str(containsCurrency))
+            sheet[f'A{counter}'] = title
+            sheet[f'B{counter}'] = "No Date" if len(date)==0 else date[0].text
+            sheet[f'C{counter}']=description
+            sheet[f'D{counter}']=imageName
+            sheet[f'E{counter}']=countOfPhrase
+            sheet[f'F{counter}']=str(containsCurrency)
             counter += 1
-        app.save_excel()
-        app.quit_application()
+        wb.save("Aljazeera.xlsx")
         self.browser.close_browser()
             
 if __name__ == '__name__':
