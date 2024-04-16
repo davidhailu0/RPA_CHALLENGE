@@ -89,6 +89,6 @@ class AljazeeraExtractor:
         app.quit_application()
         self.browser.close_browser()
             
-
-al = AljazeeraExtractor()
-al.extractLatestNews("science")
+if __name__ == '__name__':
+    al = AljazeeraExtractor()
+    al.extractLatestNews("science")
