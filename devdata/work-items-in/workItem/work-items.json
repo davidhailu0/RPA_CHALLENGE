@@ -1,6 +1,8 @@
 [
   {
-    "payload": "Hello",
+    "payload": {
+      "abebe": "bhvhfbvhfb"
+    },
     "files": {
       "Aljazeera.xlsx": "Aljazeera.xlsx"
     }
