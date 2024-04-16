@@ -26,7 +26,7 @@ class AljazeeraExtractor:
         self.browser.click_element('class:icon--search')
         self.browser.input_text("class:search-bar__input",searchPhrase)
         self.browser.submit_form("class:search-bar__form")
-        wait = WebDriverWait(self.browser.driver, timeout=5)
+        wait = WebDriverWait(self.browser.driver, timeout=20)
         try:
             wait.until(lambda d : len(self.browser.find_elements("class:search-summary__options-title"))!=0)
         except:
@@ -62,10 +62,9 @@ class AljazeeraExtractor:
         counter = 2
         for el in self.browser.find_elements("tag:article"):
             title = el.find_element(By.TAG_NAME,"span").text.replace('\xad','')
-            date =  el.find_elements(By.CLASS_NAME,"span.screen-reader-text")
+            date =  el.find_elements(By.CLASS_NAME,"screen-reader-text")
             if len(date)==0:
                 self.logger.info("There is no date for "+title+" title")
-            # self.browser.
             description = el.find_element(By.TAG_NAME,"p").text.replace('\xad','').replace('\"','')
             imageURL = el.find_element(By.TAG_NAME,"img").get_attribute("src")
             response = urllib.request.urlopen(imageURL)
