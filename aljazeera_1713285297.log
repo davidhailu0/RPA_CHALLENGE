@@ -1,0 +1,29 @@
+INFO:RPA.core.webdriver:Downloaded webdriver to: C:\Users\david\AppData\Local\robocorp\webdrivers\.wdm\drivers\chromedriver\win64\123.0.6312.122\chromedriver-win32/chromedriver.exe
+INFO:RPA.Browser.Selenium:Webdriver version taken into use: ChromeDriver 123.0.6312.122 (31f8248cdd90acbac59f700b603fed0b5967ca50-refs/branch-heads/6312@{#824})
+
+INFO:RobotFramework:Creating an instance of the Chrome WebDriver.
+INFO:RPA.Browser.Selenium:Created Chrome browser (version 123.0.6312) with arguments: --headless=new --disable-gpu --window-size=1440,900 --disable-dev-shm-usage --disable-web-security --allow-running-insecure-content --no-sandbox
+INFO:RobotFramework:<p>Attempted combinations:</p><div class="doc"><table><tr><th>Browser</th><th>Download</th><th>Error</th></tr><tr><td>Chrome</td><td>False</td><td>Message: Webdriver executable 'chromedriver' is not in PATH (with disabled Selenium Manager)
+</td></tr><tr><td>Chrome</td><td>True</td><td></td></tr></table></div>
+INFO:AlijazeeraExtractor:Aljazeera extractor initialized
+INFO:RobotFramework:Opening url 'https://www.aljazeera.com/'
+INFO:RobotFramework:Clicking element 'class:icon--search'.
+INFO:RobotFramework:Typing text 'science' into text field 'class:search-bar__input'.
+INFO:RobotFramework:Submitting form 'class:search-bar__form'.
+INFO:RobotFramework:Clicking element 'id:search-sort-option'.
+INFO:RobotFramework:Clicking element 'xpath://option[@value="date"]'.
+INFO:RPA.application:Opening workbook: C:\Users\david\OneDrive\Documents\RoboCorp Project\RPA_CHALLENGE\Aljazeera.xlsx
+INFO:RPA.application:Trying to open workbook by another method...
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Israel's war on Gaza live: Israeli attack on Gaza police vehicle kills 8 ... title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Insurance firms should shun the East African Crude Oil Pipeline ... title
+INFO:AlijazeeraExtractor:There is no date for Middle East News | Today's latest from Al Jazeera title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Middle East News | Today's latest from Al Jazeera title
+INFO:AlijazeeraExtractor:There is no date for Africa News | Today's latest from Al Jazeera title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Africa News | Today's latest from Al Jazeera title
+INFO:AlijazeeraExtractor:There is no date for Heavy rains, lightning in Pakistan kill at least 50 people | Floods ... title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Heavy rains, lightning in Pakistan kill at least 50 people | Floods ... title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Israel's war on Gaza live: Doctors find new mass grave at al-Shifa ... title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Bombs and viruses: The shadowy history of Israel's attacks on ... title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Floods kill 58 in Tanzania with heavy rains persisting | Climate Crisis ... title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for Coral reefs around the world experiencing mass bleaching ... title
+INFO:AlijazeeraExtractor:Image Successfully Downloaded for At least 33 killed in Afghanistan as heavy rains set off flash floods ... title
